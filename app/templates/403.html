@@ -1,0 +1,13 @@
+<!-- Eigenentwicklung -->
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>{{ _('Forbidden') }}</h1>
+    <!-- Falls die Seite über einen Link aufgerufen wurde, zeigt der Back-Button auf die vorherige Seite -->
+    {% if ref %}
+    <p><a href="{{ ref }}">{{ _('Back') }}</a></p>
+    {% else %}
+    <!-- Falls die Seite direkt aufgerufen wurde, zeigt der Back-Button auf die Hauptseite -->
+    <p><a href="{{ url_for('index') }}">{{ _('Back') }}</a></p>
+    {% endif %}
+{% endblock %}

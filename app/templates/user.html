@@ -1,0 +1,55 @@
+<!-- Übernommen & Eigentwicklung für Task-Auflistung-->
+{% extends "base.html" %}
+
+{% block app_content %}
+    <table class="table table-hover">
+        <tr>
+            <td width="256px"><img src="{{ user.avatar(256) }}"></td>
+            <td>
+                <h1>{{ _('User') }}: {{ user.username }}</h1>
+                {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+                {% if user.last_seen %}
+                <p>{{ _('Last seen on') }}: {{ moment(user.last_seen).format('LLL') }}</p>
+                {% endif %}
+                {% if user == current_user %}
+                <p><a href="{{ url_for('edit_profile') }}">{{ _('Edit your profile') }}</a></p>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    <!-- Falls Tasks für diesen User vorhanden sind, werden diese hier angezeigt -->
+    {% if tasks %}
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <!-- Alle Tabellen-Headers mit CSS Konfigurationen; Quelle: https://www.w3schools.com/cssref/css3_pr_text-overflow.php -->
+                <th style="max-width: 20%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Title</th>
+                <th style="max-width: 30%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Description</th>
+                <th style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Due Date</th>
+                <th style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Status</th>
+                <th style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Creator</th>
+                <th>View Task</th>
+                <th>Edit Task</th>
+            </tr>
+        </thead>
+    {% for task in tasks %}
+        {% include '_fortask.html' %}
+    {% endfor %}
+    </table>
+    {% endif %}
+    <!-- Übernommen, mit Textanpassung -->
+    <nav aria-label="...">
+        <ul class="pager">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span> {{ _('Newer tasks') }}
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    {{ _('Older tasks') }} <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}

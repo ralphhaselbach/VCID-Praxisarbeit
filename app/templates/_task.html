@@ -1,0 +1,23 @@
+<!-- Eigenentwicklung -->
+<tbody>
+    <tr>
+        <td>{{ task.title}}</td>
+        <td>{{ task.description }}</td>
+        <!-- Formatiert das Due Date in einer leserlichen Schreibweise; Ergänzt die Anzeige um ein Warnungssymbol, sofern das Due Date heute oder früher war -->
+        <!-- Quelle: https://strftime.org/ -->
+        <td>{{ task.due_date.strftime('%a, %d. %B %Y') }} {% if task.due_date <= datetime.utcnow().date() %} <span style="color: #f00;">⚠</span>{% endif %}</td>
+        <td>{{ task.status }}</td>
+        <td>
+            <!-- Übernommen -->
+            {% set user_link %}
+                <a href="{{ url_for('user', username=task.creator.username) }}">
+                    <img src="{{ task.creator.avatar(20) }}" />{{ task.creator.username }}
+                </a>
+            {% endset %}
+            {{ _('%(username)s created %(when)s',
+                username=user_link, when=moment(task.timestamp).fromNow()) }}
+        </td>
+        <!-- Eigenentwicklung -->
+        <td><a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-primary">Edit</a></td>
+    </tr>
+</tbody>
